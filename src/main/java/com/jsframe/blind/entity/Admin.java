@@ -14,8 +14,8 @@ import javax.persistence.Table;
 public class Admin {
   @Id
   @Column(name="a_id")
-  private String aId;
+  private String aid;
 
   @Column(name="a_pwd", nullable = false, length = 100)
-  private String aPwd;
+  private String apwd;
 }

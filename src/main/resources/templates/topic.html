@@ -1,84 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-
-</head>
-<body>
-</body>
   <style>
+      .topic_wrap {
+          height: 35px;
+          margin: 0 auto;
+          text-align: center;
+      }
+
+      ol {
+          display: flex;
+          justify-content: space-around;
+      }
+
       li {
           float: left;
           list-style: none;
           margin-left: 10px;
       }
-      .post_wrap{
+
+      .post_wrap {
+          height: 180px;
+          box-sizing: border-box;
           border: 1px solid black;
-          width:50%;
+          width: 50%;
+          margin: 0 auto;
+          float: left;
       }
-      section{
-          width : 1000px;
-          text-align:center;
+
+      section {
+          width: 1100px;
+          margin: 0 auto;
       }
+
+      header {
+          height: 80px;
+          width: 100%;
+          border: 1px solid black;
+      }
+
+      .post_info {
+          margin-left: 10px;
+
+      }
+
   </style>
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
           crossorigin="anonymous"></script>
 </head>
 <body>
-<header style="height : 80px; width: 100%;border: 1px solid black">
+<header>
 
 </header>
 <section>
-  <div>
-    <ul>
-      <li>토픽 전체</li>
-      <li>토픽 베스트</li>
+  <div class="topic_wrap">
+    <ol>
+      <li>전체</li>
+      <li>베스트</li>
       <li>블라블라</li>
       <li>회사생활</li>
       <li>주식/투자</li>
-      <li>썸 연애</li>
+      <li>썸/연애</li>
       <li>결혼</li>
       <li>라이프</li>
-    </ul>
+    </ol>
   </div>
-<br>
-  <div class="post_wrap">
-    <div class="text_wrap">
-      <div class="title">제목</div>
-      <div class="content">내용</div>
-    </div>
-    <div class="post_info">
-      <span>조회수</span><span>좋아요</span><span>댓글</span><span>업데이트 시간</span>
-    </div>
-  </div>
+  <br>
+  <div class="post_area">
 
+  </div>
 
 </section>
 </body>
-<script>
-    //카테고리 클릭 -> 해당 카테고리 목록 조회 -> topic에 출력
-    $("li").click(() => {
-        let category = $(this).text();
-        $.ajax({
-            type: 'get',
-            url: "category",
-            data: {"category": category},
-            success: function (result) {
-                $("").empty();
-                if (result.length === 0) {
-                    alert("해당 카테고리에 작성된 글이 없습니다.");
-                    //start();
-                }
-               // $.each(result, function (idx, post) {
-                //}
-            },
-            error: function (error) {
+<script th:inline="javascript">
+    //메세지 출력
+    $(function () {
+        let m = [[${msg}]];
+        if (m != null) {
+            alert(m);
+        }
+    })
 
-            }
-        });
+
+    let pageNum = null;
+    let category = null;
+
+
+    //메인->토픽 이동 시 매핑 처리
+    $(function () {
+        if ([[${category}]] != null) {
+            category = [[${category}]];
+        } else {
+            category = "전체"
+        }
+        getTopic(category, pageNum)
 
     })
+
+
+    //페이지 열리면 글 출력
+
+
+    //주제 클릭시, 해당 글 출력
+    $('li').click(function () {
+        pageNum = null;
+        category = $(this).text();
+        console.log(pageNum)
+        console.log(category)
+        $('.post_area').empty();
+        getTopic(category, pageNum)
+    });
+
+
+    //글 출력하기(20개)
+    function getTopic(category, pageNum) {
+        let nowDate = new Date().getTime();
+        $.ajax({
+            type: 'get',
+            url: "getTopicList",
+            dataType: "JSON",
+            data: {
+                "category": category,
+                "pageNum": pageNum
+            },
+            success: [function (topicList) {
+
+
+                $.each(topicList, function (idx, board) {
+                    let fromNow;
+
+                    let a = new Date(board.bdate);
+                    let writtenDate =a.getTime();
+
+
+
+                    let timeGap = (nowDate - writtenDate) / 1000 / 60;
+
+                    if (timeGap < 1) {
+                        fromNow = "방금전";
+                    } else if (1 <= timeGap && timeGap < 60) {
+                        fromNow = Math.floor(timeGap) + "분전";
+                    } else if (60 <= timeGap && timeGap < 60 * 24) {
+                        fromNow = Math.floor(timeGap / 60) + "시간전";
+                    } else if (60 * 24 <= timeGap && timeGap < 60 * 24 * 30) {
+                        fromNow = Math.floor(timeGap / 60 / 24) + "일전";
+                    } else if (60 * 24 * 30 <= timeGap && timeGap < 60 * 24 * 30 * 12) {
+                        fromNow = Math.floor(timeGap / 60 / 24 / 30) + "달전";
+                    } else {
+                        fromNow = Math.floor(timeGap / 60 / 24 / 30 / 12) + "년전";
+
+
+                    }
+
+                    console.log(fromNow);
+
+                    let $postWrap = $('<div class="post_wrap">').appendTo('.post_area');
+                    let $infoWrap = ($postWrap).append('<div class="info_wrap">');
+
+                    $('<span class="post_cate">').html(board.bcategory).appendTo($postWrap);
+                    $('<div class="post_title readPost">').html('<span >' + board.btitle + '</span>').appendTo($postWrap);
+                    $('<div class="post_content readPost">').html('<span >' + board.bcontent + '</span>').appendTo($postWrap);
+                    $('<span class="hidden">').html(board.bno).appendTo($postWrap);
+
+                    $('<span class="post_info">').html(board.bview).appendTo($infoWrap);
+                    $('<span class="post_info">').html(board.blike).appendTo($infoWrap);
+                    $('<span class="post_info">').html(board.bcomment).appendTo($infoWrap);
+                    // $('<span class="post_info">').html(board.bdate).appendTo($infoWrap);
+                    $('<span class="post_info">').html(fromNow).appendTo($infoWrap);
+
+                });
+            }],
+            error: [function (error) {
+                console.log(error)
+            }]
+        });
+    }
+
+    //무한페이징
+    $(window).scroll(function () {
+        console.log("Math.round($(window).scrollTop() = " + Math.round($(window).scrollTop()))
+        console.log(" $(document).height() - $(window).height() = " + $(document).height() + "-" + $(window).height())
+        console.log("차이 = " + parseInt($(document).height() - $(window).height()))
+
+        if (Math.round($(window).scrollTop()) === $(document).height() - $(window).height()) {
+
+            pageNum++;
+            getTopic(category, pageNum);
+        }
+    })
+
+
+    //상세보기 페이지 이동
+    $(document).on("click", ".readPost", function () {
+        let bno = $(this).siblings('.hidden').text();
+        console.log("bno = " + bno)
+        location.href = "detail?=" + bno;
+    })
+
+
+    //날짜 계산
+
+
 </script>
 </html>

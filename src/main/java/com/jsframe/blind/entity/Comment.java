@@ -1,16 +1,12 @@
 package com.jsframe.blind.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
+
 
 @Entity
 @Table(name="commenttbl")
@@ -19,28 +15,28 @@ public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="c_no")
-  private Long cNo;
+  private Long cno;
 
   @ManyToOne
-  @JoinColumn(name="m_id")
-  private Member m_id;
+  @JoinColumn(name="m_c_id")
+  private Member mcid;
 
   @ManyToOne
-  @JoinColumn(name="b_no")
-  private Board bNo;
+  @JoinColumn(name="b_c_no")
+  private Board bcno;
 
 
   @Column(name="c_date")
   @CreationTimestamp
-  private Timestamp cDate;
+  private Timestamp cdate;
 
 
   @Column(name="c_like")
-  private int cLike;
+  private int clike;
 
   @Column(name="c_content", length = 200, nullable = false)
-  private String cContent;
+  private String ccontent;
 
   @Column(name="c_report")
-  private int cReport;
+  private int creport;
 }
