@@ -25,11 +25,10 @@
 <!--            <span th:text="${board.mbId}"></span> &lt;!&ndash;회사 이름 | 작성자 아이디&ndash;&gt;-->
         </div>
         <div class="info">
-<!--            <span th:text="${board.blike}"></span> ·-->
             <span th:text="${board.bview}"></span> ·
             <span th:text="${board.bcomment}"></span> ·
 <!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
-        </div><!--(따봉수) 조회수 댓굴수-->
+        </div>
     </div>
     <div>
     <div class="content" th:text="${board.bcontent}"></div>
@@ -63,63 +62,32 @@
             <input type="hidden" name="mcid" value="test">
             <input type="hidden" name="mcname" value="testcomp">
             <input type="hidden" name="bcno" th:value="${board.bno}">
-            <input id="replyup" type="text" name="ccontent" placeholder="내용을 입력해주세요" >
+            <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
         </form>
     </div>
 <!--  작성된 댓글 출력 부분  -->
-    <div class="comment">
+    <div class="comment" th:each="comment:${commentList}">
         <div class="info">
             <span th:text="${comment.mcname}"></span> ·
             <span th:text="${comment.mcid.mid}"></span> ·
 <!--            <span th:text="${}"></span>-->
         </div>
+        <div class="ccontent" th:text="${comment.ccontent}">
+        <span><button type="submit" name="submit" value="update">수정</button></span>
+        <span><button type="submit" name="submit" value="delete">삭제</button></span>
     </div>
+    </div>
+
+
 </body>
 <script th:inline="javascript">
-    /*
-<!--    //뒤로가기 버튼-->
-<!--    $("#backbtn").click(function () {-->
-<!--        location.href = "/?pageNum=" + [[${session.pageNum}]];-->
-<!--    });-->
-<!--    $("#upbtn").click(function (){-->
-<!--        let pw = prompt("비밀번호를 입력하세요");-->
-<!--        console.log(pw);-->
-<!--        if (pw == null || pw == ""){-->
-<!--            alert("비밀번호를 입력하지 않았습니다");-->
-<!--            return;-->
-<!--        };-->
-<!--        if (pw == [[${board.bpwd}]]){-->
-<!--            location.href = "updateFrm?bnum=" + [[${board.bnum}]];-->
-<!--        }else {-->
-<!--            alert("비밀번호가 일치하지 않습니다");-->
-<!--        }-->
-<!--    });-->
-
-<!--    //게시글 삭제-->
-<!--    $("#delbtn").click(function (){-->
-<!--        let pw = prompt("비밀번호를 입력하세요")-->
-<!--        if (pw == null || pw ==""){-->
-<!--            alert("비밀번호를 입력하지 않았습니다");-->
-<!--            return;-->
-<!--        }-->
-<!--        if (pw == [[${board.bpwd}]]){-->
-<!--            location.href = "delete?bnum=" + [[${board.bnum}]];-->
-<!--        } else {-->
-<!--            alert("비밀번호가 일치하지 않습니다")-->
-<!--        }-->
-<!--    });-->
-*/
-
-
     /////////////////////////////////////////////////////////////
-
-
-
     $("#replyup").on("keyup", function () {
+
         const rp = $("#replyfrm").serialize();
 
         $.ajax({
-            url: "",
+            url: "detail",
             type: "post",
             data: rp,
             success: function (result) {
@@ -130,5 +98,17 @@
             }
         });
     })
+    //뒤로가기 버튼
+    $("#backbtn").click(function () {
+        location.href = "/topic";
+    });
+    //게시글 수정
+    $("#upbtn").click(function (){
+        location.href = "updateFrm?bno=" + [[${board.bno}]];
+    });
+    //게시글 삭제
+    $("#delbtn").click(function (){
+        location.href = "delete?bno=" + [[${board.bno}]];
+    });
 </script>
 </html>
