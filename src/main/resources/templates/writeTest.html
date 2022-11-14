@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Board - write</title>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+          integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script th:inline="javascript">
+      $(function () {
+          let m = [[${msg}]];
+          if (m != null) {
+              alert(m);
+          }
+          // 파일 업로드시 선택한 파일 출력
+          $("#file").on("change", function () {
+              //피일 입력창(input type=file)에서 파일 목록 가져오기
+              let files = $("#file")[0].files;    //파일이 하나만 있더라도(input에 mulitple속성이 없더라도) 여러개일 경우를 가정하고 배열로 처리해야한다.
+              console.log(files);
+              let fileName = "";
+
+              if (files.length > 1) {   //하나 이상의 파일을 선택했을 경우
+                  fileName = files[0].name + " 외 " + (files.length - 1) + "개";
+
+              } else if (files.length === 1) { //하나의 파일을 선택했을 경우
+                  fileName = files[0].name
+              } else {//파일 선택창에서 취소
+                  fileName = "파일 선택"
+              }
+              $(".upload-name").val(fileName);
+          });
+      });
+  </script>
+</head>
+<body>
+
+
+
+<div class="content">
+  <form th:action="@{writeProc}" method="post" class="write-form" enctype="multipart/form-data">
+    <!--    파일 업로드할 때 필요한 속성. -->
+    <h2 class="login-header">글쓰기</h2>
+    <select name="bcategory">
+      <option>블라블라</option>
+      <option>회사생활</option>
+      <option>주식/투자</option>
+      <option>썸 연애</option>
+      <option>결혼</option>
+      <option>라이프</option>
+    </select>
+    <input type="text" class="" name="btitle" autofocus placeholder="제목" required>
+    <input type="text" class="" name="mbid" placeholder="작성자" required>
+    <!--    textarea의 태그 사이에 작성한 건 실제 화면에 출력이 되므로, 가독성을 위한 줄바꿈은 속성 사이에서 개행한다.-->
+    <textarea rows="15" name="bcontent" placeholder="글내용을 작성하세요." class=""></textarea>
+    <div class="filebox">
+      <!-- 파일 입력 처리 영역 -->
+      <label for="file">업로드</label>            <!--      for속성엔 lable로 묶을 요소의 아이디를 넣는다.-->
+      <input type="file" name="files" id="file" multiple><!-- mulitple을 붙이면, 한번에 여러개의 피일을 넣을 수 있다)-->
+      <input type="text" class="" value="파일 선택" readonly>
+    </div>
+    <div class="btn-area">
+      <input type="submit" class="" value="W">
+      <input type="reset" class="" value="R">
+      <input type="button" class="" value="B" id="backbtn">
+    </div>
+  </form>
+</div>
+
+
+</body>
+<!--    session에 저장한 데이터를 꺼낼 땐, 'session.이름' 으로 사용한다.-->
+<script th:inline="javascript">
+    $("#backbtn").click(function () {
+        location.href = "/?pageNum=" + [[${session.pageNum}]];
+    });
+</script>
+</html>

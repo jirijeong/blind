@@ -106,10 +106,10 @@ public class BoardController {
         return topicList;
     }
 
-    @GetMapping("write")
+    @GetMapping("writeTest")
     public String writeFrm() {
         log.info("write()");
-        return "write";
+        return "writeTest";
     }
 
     @PostMapping("writeProc")
@@ -124,6 +124,18 @@ public class BoardController {
 
     }
 
+
+    @GetMapping("detail")
+    public ModelAndView detail(Long bno){
+        log.info("detail()");
+        bServ.addViewCount(bno);
+
+
+
+        mv=new ModelAndView();
+
+        return mv;
+    }
     //////////////////////////////////////////
 
 }

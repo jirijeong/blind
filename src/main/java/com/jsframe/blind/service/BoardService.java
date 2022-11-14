@@ -4,18 +4,13 @@ import com.jsframe.blind.entity.Board;
 import com.jsframe.blind.entity.BoardFiles;
 import com.jsframe.blind.repository.BoardFileRepository;
 import com.jsframe.blind.repository.BoardRepository;
-import com.jsframe.blind.util.PagingUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log
@@ -76,13 +72,13 @@ public class BoardService {
 
     //+ 좋아요
 
-    //+ 조회수
+
 
 
 
 
     //게시글 저장 메서드
-
+@Transactional
     public String insertBoard(List<MultipartFile> files,
                               Board board,
                               HttpSession session,
@@ -181,7 +177,14 @@ public class BoardService {
     }//fileUpload() end
 
 
-
+    //+ 조회수
+    @Transactional
+    public void addViewCount(Long bno) {
+        log.info("addViewCount()");
+        Board board = bRepo.findById(bno).get();
+        board.setBview(board.getBview()+1);
+        bRepo.save(board);
+    }
 
 
     ////////////////////////////
@@ -191,5 +194,4 @@ public class BoardService {
 
 
 
-    //
 } // class end
