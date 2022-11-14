@@ -130,8 +130,6 @@ public class BoardController {
         log.info("detail()");
         bServ.addViewCount(bno);
 
-
-
         mv=new ModelAndView();
 
         return mv;
