@@ -16,36 +16,36 @@ public class Board {
   private Long bNo;
 
   @ManyToOne
-  @JoinColumn(name = "m_id")
-  private Member mId;
+  @JoinColumn(name = "m_b_id")
+  private Member mbId;
 
   @Column(name = "b_title", nullable = false, length = 50)
-  private String bTitle;
+  private String btitle;
 
   @Column(name = "b_content", length = 1000)
-  private String bContent;
+  private String bcontent;
 
   @Column(name = "b_category", nullable = false, length = 20)
-  private String bCategory;
+  private String bcategory;
 
   @Column(name = "b_update", length = 10)
-  private String bUpdate;
+  private String bupdate;
 
   @Column(name = "b_view")
-  private int bView;
+  private int bview;
 
   @Column(name = "b_like")
-  private int bLike;
+  private int blike;
 
   @Column(name = "b_report")
-  private int bReport;
+  private int breport;
 
   @Column(name = "b_comment")
-  private int bComment;
+  private int bcomment;
 
   @Column(name = "b_date")
   @CreationTimestamp
-  private Timestamp bDate;
+  private Timestamp bdate;
 
 
 }

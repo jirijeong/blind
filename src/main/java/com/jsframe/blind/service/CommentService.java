@@ -36,7 +36,7 @@ public class CommentService {
 
     try {
         cRepo.save(comment);
-        log.info("c_no : " + comment.getCNo());
+        log.info("c_no : " + comment.getCno());
 
         view = "redirect:/detail";
         msg = "댓글이 작성되었습니다.";
@@ -68,17 +68,17 @@ public String commentUpdate(Comment comment, HttpSession session, RedirectAttrib
 } //commentUpdate end
 
 @Transactional
-public String commentDelete(Long cNo, HttpSession session, RedirectAttributes rttr){
+public String commentDelete(Long cno, HttpSession session, RedirectAttributes rttr){
     log.info("commentDelete()");
     String msg = null;
     String view = null;
 
     Comment comment = new Comment();
-    comment.setCNo(cNo);
+    comment.setCno(cno);
 
     //realPath??
     try {
-        cRepo.deleteById(cNo);
+        cRepo.deleteById(cno);
         msg = "삭제되었습니다.";
         view = "redirect:/detail";
     } catch (Exception e){

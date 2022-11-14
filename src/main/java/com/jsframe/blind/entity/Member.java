@@ -11,15 +11,15 @@ import javax.persistence.*;
 public class Member {
   @Id
   @Column(name = "m_id", length = 20)
-  private String mId;
+  private String mid;
 
   @Column(name="m_pwd", nullable = false, length = 100)
-  private String mPwd;
+  private String mpwd;
 
   @Column(name="m_email", nullable = false, length = 100)
-  private String mEmail;
+  private String memail;
 
   @Column(name="m_cname", nullable = false, length = 100)
-  private String mCname;
+  private String mcname;
 
 }
