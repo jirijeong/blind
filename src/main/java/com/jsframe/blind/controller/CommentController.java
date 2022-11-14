@@ -26,7 +26,7 @@ public class CommentController {
 
 
 //    private BoardService bServ;
-    //지인 : 이따 수정할게욥
+////    지인 : 이따 수정할게욥
 //    @GetMapping("detail")
 //    public ModelAndView detail(long bnum){
 //        log.info("detail()");
