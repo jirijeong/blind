@@ -25,18 +25,18 @@ public class CommentController {
     private CommentService cServ;
 
 
-    private BoardService bServ;
+//    private BoardService bServ;
     //지인 : 이따 수정할게욥
-    @GetMapping("detail")
-    public ModelAndView detail(long bnum){
-        log.info("detail()");
-        //서비스에서 getBoard 가져옴(bnum 받아옴)
-        mv = bServ.getBoard(bnum);
-        //update에서도 써야해서 서비스 getBoard에서 옮겨옴
-        mv.setViewName("detail");
-
-        return mv;
-    }
+//    @GetMapping("detail")
+//    public ModelAndView detail(long bnum){
+//        log.info("detail()");
+//        //서비스에서 getBoard 가져옴(bnum 받아옴)
+//        mv = bServ.getBoard(bnum);
+//        //update에서도 써야해서 서비스 getBoard에서 옮겨옴
+//        mv.setViewName("detail");
+//
+//        return mv;
+//    }
 
 @PostMapping ("cWriteProc")
     public String  cWriteProc(Comment comment, HttpSession session, RedirectAttributes rttr){
