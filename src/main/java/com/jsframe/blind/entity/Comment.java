@@ -22,6 +22,10 @@ public class Comment {
   private Member mcid;
 
   @ManyToOne
+  @JoinColumn(name="m_cname")
+  private Member mcname;
+
+  @ManyToOne
   @JoinColumn(name="b_c_no")
   private Board bcno;
 

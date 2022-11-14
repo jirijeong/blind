@@ -19,6 +19,10 @@ public class Board {
   @JoinColumn(name = "m_b_id")
   private Member mbId;
 
+  @ManyToOne
+  @JoinColumn(name = "m_cname")
+  private Member mcname;
+
   @Column(name = "b_title", nullable = false, length = 50)
   private String btitle;
 
