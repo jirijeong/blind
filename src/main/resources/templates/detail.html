@@ -18,26 +18,54 @@
 <body>
 <div class="content">
     <div class="view_head">
+        <div class="category" th:text="${board.bcategory}"></div>
+        <div class="content_title" th:text="${board.btitle}">
+            <span th:text="${board.mcname}"></span> |
+            <span th:text="${board.mbId}"></span>
+        </div> <!--회사 이름 | 작성자 아이디-->
         <div class="info">
-
-        </div>
+<!--            <span th:text="${board.blike}"></span> |-->
+            <span th:text="${board.bview}"></span> |
+            <span th:text="${board.bcomment}"></span> |
+<!--     몇분전에 작성됐는지 스팬안에 넣어야함       -->
+        </div><!--(따봉수) 조회수 댓굴수-->
     </div>
-    <div class="content">
-        <div class="btn-area">
+</div>
+    <div class="content" th:text="${board.bcontent}">
+        <div class="button">
             <button id="upbtn">수정</button>
             <button id="delbtn">삭제</button>
             <button id="backbtn">뒤로가기</button>
         </div>
     </div>
+<!--  댓글 작성 부분  -->
     <div class="reply">
-
+        <form th:action="@{cWriteProc}" method="post" class="reply_form" enctype="multipart/form-data">
+<!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
+    <input type="text" placeholder="내용을 입력해주세요">
+        </form>
     </div>
+<!--  작성된 댓글 출력 부분  -->
     <div class="comment">
         <div class="info">
-            
+            <span th:text="${comment.mcname}"></span> |
+            <span th:text="${comment.mcid}"></span> |
+            <span th:text=""></span>
         </div>
-
     </div>
-</div>
 </body>
+<script th:inline="javascript">
+    //뒤로가기 버튼
+    $("#backbtn").click(function () {
+        location.href = "/?pageNum=" + [[${session.pageNum}]];
+    });
+    //글 수정
+    $("#upbtn").click(function (){
+        location.href = "updateFrm?bno=" + [[${board.bno}]];
+    });
+    //글 삭제
+    $("#delbtn").click(function (){
+        location.href = "updateFrm?bno=" + [[${board.bno}]];
+    });
+</script>
 </html>

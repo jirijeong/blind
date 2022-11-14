@@ -31,6 +31,18 @@ public class BoardService {
     private ModelAndView mv;
 
 
+//지인 !! 이따 수정할것
+public ModelAndView getBoard(long bnum){
+    log.info("getBoard()");
+    mv = new ModelAndView();
+        mv.setViewName("detail"); //>> 컨트롤러 디테일로 옮겼음
+
+    //게시글을 DB에서 가져와서 담기
+    Board board = bRepo.findById(bnum).get();
+    mv.addObject("board",board);
+
+    return mv;
+}
 
 
 
