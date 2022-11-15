@@ -135,6 +135,7 @@
                     let a = new Date(board.bdate);
                     let writtenDate =a.getTime();
 
+                    console.log("bdate =  " +board.bdate)
 
 
                     let timeGap = (nowDate - writtenDate) / 1000 / 60;
@@ -165,6 +166,8 @@
                     $('<div class="post_content readPost">').html('<span >' + board.bcontent + '</span>').appendTo($postWrap);
                     $('<span class="hidden">').html(board.bno).appendTo($postWrap);
 
+                    $('<span class="post_info">').html("작성자: " + board.mbid.mid ).appendTo($infoWrap);
+                    $('<span class="post_info">').html("회사명: " + board.mbid.mcname ).appendTo($infoWrap);
                     $('<span class="post_info">').html("조회수: " + board.bview).appendTo($infoWrap);
                     $('<span class="post_info">').html("좋아요수: " + board.blike).appendTo($infoWrap);
                     $('<span class="post_info">').html("댓글 수" + board.bcomment).appendTo($infoWrap);

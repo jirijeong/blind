@@ -22,8 +22,8 @@ public class Comment {
   private Member mcid;
 
   @ManyToOne
-  @JoinColumn(name="m_cname")
-  private Member mcname;
+  @JoinColumn(name="m_c_cname")
+  private Member mccname;
 
   @ManyToOne
   @JoinColumn(name="b_c_no")
