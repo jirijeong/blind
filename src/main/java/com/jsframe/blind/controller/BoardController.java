@@ -58,8 +58,6 @@ public class BoardController {
     List<Board> topicList = bServ.getTopicList(category, pageNum, session);
 
 
-
-
     return topicList;
   }
 

@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name ="viewport" content ="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>게시글 상세페이지</title>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script th:inline="javascript">
-        $(function(){
+        $(function () {
             let msg = [[${msg}]];
-            if(msg != null){
+            if (msg != null) {
                 alert(msg);
             }
         });
@@ -21,28 +22,27 @@
         <div class="category" th:text="${board.bcategory}"></div>
         <div class="content_title" th:text="${board.btitle}"></div>
         <div>
-<!--            <span th:text="${board.mcname.mcname}"></span>-->
-<!--            <span th:text="${board.mbId}"></span> &lt;!&ndash;회사 이름 | 작성자 아이디&ndash;&gt;-->
+            <!--            <span th:text="${board.mbcname.mcname}"></span> ·--> <!--이 부분 처리가 안되고있음-->
+            <span th:text="${board.mbid.mid}"></span> <!--회사 이름 · 작성자 아이디-->
         </div>
         <div class="info">
             <span th:text="${board.bview}"></span> ·
             <span th:text="${board.bcomment}"></span> ·
-<!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
+            <!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
         </div>
     </div>
     <div>
-    <div class="content" th:text="${board.bcontent}"></div>
-    <div>
-        <button id="upbtn">수정</button>
-        <button id="delbtn">삭제</button>
-        <button id="backbtn">뒤로가기</button>
+        <div class="content" th:text="${board.bcontent}"></div>
+        <div>
+            <button id="upbtn">수정</button>
+            <button id="delbtn">삭제</button>
+            <button id="backbtn">뒤로가기</button>
+        </div>
     </div>
-</div>
 
-<!-- 첨부파일 출력 부분-->
-<div>
-    <div class="">FILES</div>
-<!--    <div class="d_content p-85 file_h" style="overflow: auto;">-->
+    <!-- 첨부파일 출력 부분-->
+    <div>
+        <div class="">FILES</div>
         <th:block th:if="${#lists.isEmpty(bfList)}">
             첨부된 파일이 없습니다.
         </th:block>
@@ -56,58 +56,60 @@
     </div>
 </div>
 <!--  댓글 작성 부분  -->
-    <div class="reply">
-        <form id="replyfrm" class="reply_form">
-<!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
-            <input type="hidden" name="mcid" value="test">
-            <input type="hidden" name="mcname" value="testcomp">
-            <input type="hidden" name="bcno" th:value="${board.bno}">
-            <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
-        </form>
-    </div>
+<div class="reply">
+    <form method="post" action="cWriteProc" id="replyfrm" class="reply_form">
+        <!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
+        <input type="hidden" name="mcid" value="test">
+<!--        <input type="hidden" name=[[${session.member}]] value="test">-->
+        <input type="hidden" name="mcname" value="testcomp">
+        <input type="hidden" name="bcno" th:value="${board.bno}">
+        <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
+    </form>
+</div>
 <!--  작성된 댓글 출력 부분  -->
-    <div class="comment" th:each="comment:${commentList}">
-        <div class="info">
-            <span th:text="${comment.mcname}"></span> ·
-            <span th:text="${comment.mcid.mid}"></span> ·
-<!--            <span th:text="${}"></span>-->
-        </div>
-        <div class="ccontent" th:text="${comment.ccontent}">
+<div class="comment" th:each="comment:${commentList}">
+    <div class="info">
+        <span th:text="${comment.mcname}"></span> ·
+        <span th:text="${comment.mcid.mid}"></span> ·
+        <!--            <span th:text="${}"></span>-->
+    </div>
+    <div class="ccontent" th:text="${comment.ccontent}">
         <span><button type="submit" name="submit" value="update">수정</button></span>
         <span><button type="submit" name="submit" value="delete">삭제</button></span>
     </div>
-    </div>
+</div>
 
 
 </body>
 <script th:inline="javascript">
     /////////////////////////////////////////////////////////////
-    $("#replyup").on("keyup", function () {
-
-        const rp = $("#replyfrm").serialize();
-
-        $.ajax({
-            url: "detail",
-            type: "post",
-            data: rp,
-            success: function (result) {
-
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    })
+    // $("#replyup").on("keyup", function () {
+    //
+    //     const rp = $("#replyfrm").serialize();
+    //
+    //     $.ajax({
+    //         url: "detail",
+    //         type: "post",
+    //         data: rp,
+    //         success: function (result) {
+    //
+    //         },
+    //         error: function (error) {
+    //             alert("다시 시도해주세요")
+    //             console.log(error);
+    //         }
+    //     });
+    // })
     //뒤로가기 버튼
     $("#backbtn").click(function () {
         location.href = "/topic";
     });
-    //게시글 수정
-    $("#upbtn").click(function (){
+    //게시글 수정 버튼
+    $("#upbtn").click(function () {
         location.href = "updateFrm?bno=" + [[${board.bno}]];
     });
-    //게시글 삭제
-    $("#delbtn").click(function (){
+    //게시글 삭제 버튼
+    $("#delbtn").click(function () {
         location.href = "delete?bno=" + [[${board.bno}]];
     });
 </script>

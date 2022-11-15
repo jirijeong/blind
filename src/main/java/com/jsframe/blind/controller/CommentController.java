@@ -1,18 +1,23 @@
 package com.jsframe.blind.controller;
 
+import com.jsframe.blind.entity.Board;
 import com.jsframe.blind.entity.Comment;
+import com.jsframe.blind.repository.CommentRepository;
 import com.jsframe.blind.service.BoardService;
 import com.jsframe.blind.service.CommentService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.Column;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Log
@@ -23,6 +28,9 @@ public class CommentController {
 
     @Autowired
     private CommentService cServ;
+
+    @Autowired
+    private CommentRepository cRepo;
 
 
 
@@ -59,5 +67,13 @@ public class CommentController {
     String view = cServ.commentDelete(cno,session,rttr);
 
     return view;
+}
+@PostMapping("getCommentList")
+    public @ResponseBody List<Comment> comments(Comment bcno, HttpSession session){
+    log.info("getCommentList()");
+    //댓글 목록 가져오기
+    List<Comment> commentList = cServ.getCommentList(bcno, session);
+
+    return commentList;
 }
 }

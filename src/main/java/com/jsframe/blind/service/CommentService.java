@@ -1,6 +1,8 @@
 package com.jsframe.blind.service;
 
+import com.jsframe.blind.entity.Board;
 import com.jsframe.blind.entity.Comment;
+import com.jsframe.blind.repository.BoardRepository;
 import com.jsframe.blind.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -24,6 +26,9 @@ public class CommentService {
 
     @Autowired
     private CommentRepository cRepo;
+
+    @Autowired
+    private BoardRepository bRepo;
 
     private ModelAndView mv;
 
@@ -90,4 +95,11 @@ public String commentDelete(Long cno, HttpSession session, RedirectAttributes rt
     return view;
 }    //commentDelete end
 
+
+    public List<Comment> getCommentList(Comment bcno, HttpSession session) {
+    mv = new ModelAndView();
+    log.info("getCommentList()");
+
+    return null; //빨간줄 뜨는거 보기싫어서 임시로 null 집어넣음
+    }
 }
