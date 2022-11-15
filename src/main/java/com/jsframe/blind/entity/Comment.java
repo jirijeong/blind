@@ -21,9 +21,10 @@ public class Comment {
   @JoinColumn(name="m_c_id")
   private Member mcid;
 
-  @ManyToOne
-  @JoinColumn(name="m_c_cname")
-  private Member mccname;
+
+  @Column(name="m_cname")
+  private String mcname;
+
 
   @ManyToOne
   @JoinColumn(name="b_c_no")

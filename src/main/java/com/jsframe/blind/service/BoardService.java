@@ -5,6 +5,7 @@ import com.jsframe.blind.entity.BoardFiles;
 import com.jsframe.blind.entity.Member;
 import com.jsframe.blind.repository.BoardFileRepository;
 import com.jsframe.blind.repository.BoardRepository;
+import com.jsframe.blind.repository.MemberRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,12 @@ public class BoardService {
   @Autowired
   private BoardFileRepository bfRepo;
 
-  private ModelAndView mv;
+
+    @Autowired
+    private MemberRepository mRepo;
+
+    private ModelAndView mv;
+
 
 
   //지인 !! 이따 수정할것
@@ -135,8 +141,9 @@ public class BoardService {
     String msg = null;
     String view = null;
 
+
     try {
-         /*
+/*
       for (int i = 0; i < 100; i++) {
 
       Member mem = new Member();
@@ -159,7 +166,7 @@ public class BoardService {
 
 
       }
-         */
+*/
 
       bRepo.save(board);
       fileUpload(files, session, board);

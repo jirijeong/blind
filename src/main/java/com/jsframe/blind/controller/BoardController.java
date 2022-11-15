@@ -27,12 +27,6 @@ public class BoardController {
   @Autowired
   private BoardService bServ;
 
-//    @GetMapping("/")
-//    public ModelAndView getList(Integer pageNum, HttpSession session) {
-//        log.info("getList()");
-//     //   mv = bSev.getBoardList(pageNum, session);
-//        return mv;
-//    }
 
 
   ///////////////   suyeop   //////////////////
@@ -97,10 +91,8 @@ public class BoardController {
     mv = bServ.getBoard(bno);
     mv.setViewName("detail");
 
-
     return mv;
   }
-  //////////////////////////////////////////
 
 }
 

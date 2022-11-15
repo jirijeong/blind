@@ -19,53 +19,96 @@
 <div class="content">
     <div class="view_head">
         <div class="category" th:text="${board.bcategory}"></div>
-        <div class="content_title" th:text="${board.btitle}">
-            <span th:text="${board.mcname}"></span> |
-            <span th:text="${board.mbId}"></span>
-        </div> <!--회사 이름 | 작성자 아이디-->
+        <div class="content_title" th:text="${board.btitle}"></div>
+        <div>
+<!--            <span th:text="${board.mcname.mcname}"></span>-->
+<!--            <span th:text="${board.mbId}"></span> &lt;!&ndash;회사 이름 | 작성자 아이디&ndash;&gt;-->
+        </div>
         <div class="info">
-<!--            <span th:text="${board.blike}"></span> |-->
-            <span th:text="${board.bview}"></span> |
-            <span th:text="${board.bcomment}"></span> |
-<!--     몇분전에 작성됐는지 스팬안에 넣어야함       -->
-        </div><!--(따봉수) 조회수 댓굴수-->
-    </div>
-</div>
-    <div class="content" th:text="${board.bcontent}">
-        <div class="button">
-            <button id="upbtn">수정</button>
-            <button id="delbtn">삭제</button>
-            <button id="backbtn">뒤로가기</button>
+            <span th:text="${board.bview}"></span> ·
+            <span th:text="${board.bcomment}"></span> ·
+<!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
         </div>
     </div>
+    <div>
+    <div class="content" th:text="${board.bcontent}"></div>
+    <div>
+        <button id="upbtn">수정</button>
+        <button id="delbtn">삭제</button>
+        <button id="backbtn">뒤로가기</button>
+    </div>
+</div>
+
+<!-- 첨부파일 출력 부분-->
+<div>
+    <div class="">FILES</div>
+<!--    <div class="d_content p-85 file_h" style="overflow: auto;">-->
+        <th:block th:if="${#lists.isEmpty(bfList)}">
+            첨부된 파일이 없습니다.
+        </th:block>
+        <th:block th:unless="${#lists.isEmpty(bfList)}">
+            <th:block th:each="bf:${bfList}">
+                <a th:href="@{download(bfsysname=${bf.bfsysname},bforiname=${bf.bforiname})}">
+                    <span class="file-title" th:text="${bf.bforiname}"></span>
+                </a>
+            </th:block>
+        </th:block>
+    </div>
+</div>
 <!--  댓글 작성 부분  -->
     <div class="reply">
-        <form th:action="@{cWriteProc}" method="post" class="reply_form" enctype="multipart/form-data">
+        <form id="replyfrm" class="reply_form">
 <!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
-    <input type="text" placeholder="내용을 입력해주세요">
+            <input type="hidden" name="mcid" value="test">
+            <input type="hidden" name="mcname" value="testcomp">
+            <input type="hidden" name="bcno" th:value="${board.bno}">
+            <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
         </form>
     </div>
 <!--  작성된 댓글 출력 부분  -->
-    <div class="comment">
+    <div class="comment" th:each="comment:${commentList}">
         <div class="info">
-            <span th:text="${comment.mcname}"></span> |
-            <span th:text="${comment.mcid}"></span> |
-            <span th:text=""></span>
+            <span th:text="${comment.mcname}"></span> ·
+            <span th:text="${comment.mcid.mid}"></span> ·
+<!--            <span th:text="${}"></span>-->
         </div>
+        <div class="ccontent" th:text="${comment.ccontent}">
+        <span><button type="submit" name="submit" value="update">수정</button></span>
+        <span><button type="submit" name="submit" value="delete">삭제</button></span>
     </div>
+    </div>
+
+
 </body>
 <script th:inline="javascript">
+    /////////////////////////////////////////////////////////////
+    $("#replyup").on("keyup", function () {
+
+        const rp = $("#replyfrm").serialize();
+
+        $.ajax({
+            url: "detail",
+            type: "post",
+            data: rp,
+            success: function (result) {
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    })
     //뒤로가기 버튼
     $("#backbtn").click(function () {
-        location.href = "/?pageNum=" + [[${session.pageNum}]];
+        location.href = "/topic";
     });
-    //글 수정
+    //게시글 수정
     $("#upbtn").click(function (){
         location.href = "updateFrm?bno=" + [[${board.bno}]];
     });
-    //글 삭제
+    //게시글 삭제
     $("#delbtn").click(function (){
-        location.href = "updateFrm?bno=" + [[${board.bno}]];
+        location.href = "delete?bno=" + [[${board.bno}]];
     });
 </script>
 </html>
