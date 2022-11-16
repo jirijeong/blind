@@ -13,7 +13,9 @@
 }
 
 /*                                  */
-
+.hidden{
+    display: none;
+}
 
 #wrapdiv {
     margin: auto;
@@ -54,3 +56,6 @@
     box-sizing: border-box;
 }
 
+.c_date{
+    float : right;
+}

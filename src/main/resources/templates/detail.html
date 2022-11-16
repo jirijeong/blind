@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<style>
-    .hidden {
-        display: none;
-    }
 
-</style>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>게시글 상세페이지</title>
+  <link rel="stylesheet" href="css/detail.css">
+  <link rel="stylesheet" href="css/header.css">
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <th:block th:include="header.html"></th:block>
+
 </head>
 <body>
-<div class="content">
-  <div class="view_head">
-    <div class="category" th:text="${board.bcategory}"></div>
-    <div class="content_title" th:text="${board.btitle}"></div>
-    <div>
-      <span th:text="${board.mbid.mcname}"></span>
-      <span th:text="${board.mbid.mid}"></span>
-    </div>
-    <div class="info">
-      <span th:text="${board.bview}"></span> ·
-      <span th:text="${board.bcomment}"></span> ·
-      <!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
+<div id="wrapdiv">
+  <div class="content">
+    <div class="view_head">
+      <div class="category" th:text="${board.bcategory}"></div>
+      <div class="content_title" th:text="${board.btitle}"></div>
+      <div>
+        <span th:text="${board.mbid.mcname}"></span>
+        <span th:text="${board.mbid.mid}"></span>
+      </div>
+      <div class="info">
+        <span th:text="${board.bview}"></span> ·
+        <span th:text="${board.bcomment}"></span> ·
+        <!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
+      </div>
     </div>
   </div>
   <div>
-    <div class="content" th:text="${board.bcontent}"></div>
+    <div class="bcontent" th:text="${board.bcontent}"></div>
     <div>
       <button id="upbtn" class="hidden">수정</button>
       <button id="delbtn" class="hidden">삭제</button>
@@ -52,46 +53,47 @@
       </th:block>
     </th:block>
   </div>
-</div>
 
 
-<div class="reply_wrap">
-  <th:block th:if="${session.member}!=null">
-    <div class="reply">
-      <form action="cWriteProc" method="post" id="replyfrm" class="reply_form">
-        <!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
+  <div class="reply_wrap">
+    <th:block th:if="${session.member}!=null">
+      <div class="reply">
+        <form action="cWriteProc" method="post" id="replyfrm" class="reply_form">
+          <!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
 
-        <input type="hidden" name="mccname" th:value="${session.member.mcname}">
-        <input type="hidden" name="bcno" th:value="${session.board.bno}">
-        <input type="hidden" name="mcid" th:value="${session.member.mid}">
-        <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
-      </form>
-    </div>
-  </th:block>
-  <th:block th:unless="${session.member}!=null">
-    <input placeholder="댓글을 입력하시려면, 먼저 로그인 해주세요" readonly>
-    <button id="login">로그인</button>
-  </th:block>
+          <input type="hidden" name="mccname" th:value="${session.member.mcname}">
+          <input type="hidden" name="bcno" th:value="${session.board.bno}">
+          <input type="hidden" name="mcid" th:value="${session.member.mid}">
+          <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
+        </form>
+      </div>
+    </th:block>
+    <th:block th:unless="${session.member}!=null">
+      <input placeholder="댓글을 입력하시려면, 먼저 로그인 해주세요" readonly>
+      <button id="login">로그인</button>
+      <div class="comment_area" >
 
-  <div class="comment_area">
+      </div>
 
+    </th:block>
   </div>
-
-
-  <!--  &lt;!&ndash;  작성된 댓글 출력 부분  &ndash;&gt;-->
-  <!--  <div class="comment" th:each="comment:${commentList}">-->
-  <!--    <div class="info">-->
-  <!--      <span th:text="${comment.mcname}"></span> ·-->
-  <!--      <span th:text="${comment.mcid.mid}"></span> ·-->
-  <!--      &lt;!&ndash;            <span th:text="${}"></span>&ndash;&gt;-->
-  <!--    </div>-->
-  <!--    <div class="ccontent" th:text="${comment.ccontent}">-->
-  <!--      <span><button type="submit" name="submit" value="update">수정</button></span>-->
-  <!--      <span><button type="submit" name="submit" value="delete">삭제</button></span>-->
-  <!--    </div>-->
-  <!--  </div>-->
+  <button id="moreComment">댓글 더보기</button>
 </div>
-<button id="moreComment">댓글 더보기</button>
+
+
+<!--  &lt;!&ndash;  작성된 댓글 출력 부분  &ndash;&gt;-->
+<!--  <div class="comment" th:each="comment:${commentList}">-->
+<!--    <div class="info">-->
+<!--      <span th:text="${comment.mcname}"></span> ·-->
+<!--      <span th:text="${comment.mcid.mid}"></span> ·-->
+<!--      &lt;!&ndash;            <span th:text="${}"></span>&ndash;&gt;-->
+<!--    </div>-->
+<!--    <div class="ccontent" th:text="${comment.ccontent}">-->
+<!--      <span><button type="submit" name="submit" value="update">수정</button></span>-->
+<!--      <span><button type="submit" name="submit" value="delete">삭제</button></span>-->
+<!--    </div>-->
+<!--  </div>-->
+
 
 </body>
 <script th:inline="javascript">
@@ -121,7 +123,6 @@
         // })
 
 
-
     }
 
 
@@ -143,7 +144,7 @@
             data: {
                 'cPageNum': cPageNum,
                 'mid': mid,
-                'bno' : nowBno
+                'bno': nowBno
             },
             success: [function (commentList) {
 
@@ -176,16 +177,16 @@
                     }
                     console.log(fromNow);
 
-                    let $postWrap = $('<div class="post_wrap">').appendTo('.comment_area');
-                    let $infoWrap = ($postWrap).append('<div class="info_wrap">');
+                    let $commentWrap = $('<div class="comment_wrap">').appendTo('.comment_area');
+                    let $infoWrap = ($commentWrap).append('<div class="info_wrap">');
 
-                    $('<span class="post_company">').html(comment.mcid.mcname + " · ").appendTo($postWrap);
-                    $('<span class="post_writer">').html(comment.mcid.mid + '</br>').appendTo($postWrap);
-                    $('<div class="post_content readPost">').html(comment.ccontent).appendTo($postWrap);
+                    $('<span class="c_company">').html(comment.mcid.mcname + " · ").appendTo($commentWrap);
+                    $('<span class="c_writer">').html(comment.mcid.mid + '</br>').appendTo($commentWrap);
+                    $('<div class="c_content">').html(comment.ccontent).appendTo($commentWrap);
 
 
-                    $('<span class="post_info">').html("👍 : " + comment.clike).appendTo($infoWrap);
-                    $('<span class="post_date post_info">').html(fromNow).appendTo($infoWrap);
+                    $('<span class="c_info">').html("👍 : " + comment.clike).appendTo($infoWrap);
+                    $('<span class="c_date c_info">').html(fromNow).appendTo($infoWrap);
                     $('<button class="deleteCommentBtn hidden">').text("댓글 삭제").appendTo($infoWrap);
                     $('<span class="hidden">').html(comment.cno).appendTo($infoWrap);
                 });
@@ -198,12 +199,9 @@
     }
 
 
-
-
-
     $("#moreComment").click(function () {
         cPageNum++
-        getComment(cPageNum, mid,nowBno)
+        getComment(cPageNum, mid, nowBno)
     })
 
 
@@ -211,7 +209,6 @@
             location.href = "login"
         }
     )
-
 
 
     //뒤로가기 버튼
