@@ -1,15 +1,18 @@
 package com.jsframe.blind.controller;
 
+import com.jsframe.blind.entity.Board;
 import com.jsframe.blind.entity.Comment;
-import com.jsframe.blind.entity.Member;
+import com.jsframe.blind.repository.CommentRepository;
+
 import com.jsframe.blind.service.BoardService;
 import com.jsframe.blind.service.CommentService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,6 +29,9 @@ public class CommentController {
 
   @Autowired
   private CommentService cServ;
+
+  @Autowired
+  private CommentRepository cRepo;
 
 
   private BoardService bServ;
@@ -63,39 +69,20 @@ public class CommentController {
     String view = cServ.commentDelete(cno, session, rttr);
 
     return view;
+
   }
 
 
-
-
-
-
-
-
-
-
   @GetMapping("getCommentList")
-  public @ResponseBody List<Comment> commentList( Integer cPageNum,   String mid, Long bno){
+  public @ResponseBody List<Comment> commentList(Integer cPageNum, String mid, Long bno) {
     log.info("getCommentList()");
     log.info("mid = " + mid);
 
-    List<Comment> commentList = cServ.getCommentList( cPageNum, mid, bno);
-
+    List<Comment> commentList = cServ.getCommentList(cPageNum, mid, bno);
 
 
     return commentList;
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

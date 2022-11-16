@@ -68,11 +68,13 @@ public class BoardController {
     //해당 카테고리의 글목록 가져오기(20개)
     List<Board> topicList = bServ.getTopicList(category, pageNum, session);
 
+
 //
 //    if(topicList.get(0)==null){
 //      System.out.println("topicList = " + topicList);
 //      topicList =null;
 //    }
+
 
     return topicList;
   }

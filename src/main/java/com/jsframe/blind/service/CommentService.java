@@ -28,11 +28,11 @@ public class CommentService {
   @Autowired
   private CommentRepository cRepo;
 
+    @Autowired
+    private BoardRepository bRepo;
 
-  @Autowired
-  private BoardRepository bRepo;
+    private ModelAndView mv;
 
-  private ModelAndView mv;
 
   //댓글 작성
   @Transactional
@@ -139,4 +139,11 @@ public class CommentService {
   }
 
 
+
+    public List<Comment> getCommentList(Comment bcno, HttpSession session) {
+    mv = new ModelAndView();
+    log.info("getCommentList()");
+
+    return null; //빨간줄 뜨는거 보기싫어서 임시로 null 집어넣음
+    }
 }

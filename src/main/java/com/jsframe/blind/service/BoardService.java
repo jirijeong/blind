@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -30,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,10 +51,11 @@ public class BoardService {
   public ModelAndView getBoard(long bno) {
     log.info("getBoard()");
     mv = new ModelAndView();
-    mv.setViewName("detail"); //>> 컨트롤러 디테일로 옮겼음
+    mv.setViewName("detail");
 
     //게시글을 DB에서 가져와서 담기
     Board board = bRepo.findById(bno).get();
+
     mv.addObject("board", board);
 
 

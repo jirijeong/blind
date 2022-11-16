@@ -12,7 +12,6 @@
   <title>게시글 상세페이지</title>
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-
 </head>
 <body>
 <div class="content">
@@ -93,7 +92,6 @@
   <!--  </div>-->
 </div>
 <button id="moreComment">댓글 더보기</button>
-
 
 </body>
 <script th:inline="javascript">
@@ -215,10 +213,12 @@
     )
 
 
+
     //뒤로가기 버튼
     $("#backbtn").click(function () {
         location.href = "/?category=" + [[${board.bcategory}]];
     });
+
     //게시글 수정
     $("#upbtn").click(function () {
         location.href = "updateFrm?bno=" + nowBno;
@@ -231,6 +231,7 @@
         } else {
             alert("삭제가 취소됐습니다.")
         }
+
     });
 
     $(document).on("click", ".deleteCommentBtn", function () {
