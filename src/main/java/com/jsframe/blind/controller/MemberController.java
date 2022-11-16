@@ -20,7 +20,7 @@ public class MemberController {
   private MemberService mServ;
 
 
-  @GetMapping("/")
+  @GetMapping("login")
   public String login() {
     log.info("login()");
     return "login";
@@ -45,9 +45,9 @@ public class MemberController {
 
   //회원가입
   @PostMapping("regProc")
-  public String regProc(Member member, RedirectAttributes rttr) {
+  public String regProc(Member member, RedirectAttributes rttr, HttpSession session) {
     log.info("regProc()");
-    String view = mServ.regMember(member, rttr);
+    String view = mServ.regMember(member, rttr, session);
     return view;
   }
 

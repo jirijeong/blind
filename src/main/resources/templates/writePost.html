@@ -38,25 +38,29 @@
 <div class="content">
   <form th:action="@{writeProc}" method="post" class="write-form" enctype="multipart/form-data">
     <!--    파일 업로드할 때 필요한 속성. -->
-    <h2 class="login-header">글쓰기</h2>
-    <select name="bcategory">
+    <h2 class="login-header">글 작성</h2>
+   <p>카테고리 <select name="bcategory">
       <option>블라블라</option>
       <option>회사생활</option>
       <option>주식/투자</option>
       <option>썸 연애</option>
       <option>결혼</option>
       <option>라이프</option>
-    </select>
-    <input type="text" class="" name="btitle" autofocus placeholder="제목" required>
-    <input type="text" class="" name="mbid" placeholder="작성자" required>
-    <!--    textarea의 태그 사이에 작성한 건 실제 화면에 출력이 되므로, 가독성을 위한 줄바꿈은 속성 사이에서 개행한다.-->
-    <textarea rows="15" name="bcontent" placeholder="글내용을 작성하세요." class=""></textarea>
+    </select></p>
+    <p>제목 : <input type="text" class="" name="btitle" autofocus placeholder="제목" required></p>
+    <p>작성자 : <input type="text" class="" name="mbid" th:value="${session.member.mid}" readonly></p>
+
+    <p>내용 : <textarea rows="15" name="bcontent" placeholder="글 내용을 작성하세요.(1000자 이내)" ></textarea></p>
+
+
+
     <div class="filebox">
-      <!-- 파일 입력 처리 영역 -->
       <label for="file">업로드</label>            <!--      for속성엔 lable로 묶을 요소의 아이디를 넣는다.-->
       <input type="file" name="files" id="file" multiple><!-- mulitple을 붙이면, 한번에 여러개의 피일을 넣을 수 있다)-->
       <input type="text" class="" value="파일 선택" readonly>
     </div>
+
+
     <div class="btn-area">
       <input type="submit" class="" value="W">
       <input type="reset" class="" value="R">
@@ -70,7 +74,7 @@
 <!--    session에 저장한 데이터를 꺼낼 땐, 'session.이름' 으로 사용한다.-->
 <script th:inline="javascript">
     $("#backbtn").click(function () {
-        location.href = "/?pageNum=" + [[${session.pageNum}]];
+        location.href = "/?category=" + [[${session.category}]];
     });
 </script>
 </html>

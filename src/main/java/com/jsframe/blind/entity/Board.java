@@ -2,6 +2,7 @@ package com.jsframe.blind.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,10 +19,6 @@ public class Board {
   @ManyToOne
   @JoinColumn(name = "m_b_id")
   private Member mbid;
-//////////변경
-  @ManyToOne
-  @JoinColumn(name = "m_b_cname")
-  private Member mbcname;
 
   @Column(name = "b_title", nullable = false, length = 50)
   private String btitle;
@@ -32,19 +29,20 @@ public class Board {
   @Column(name = "b_category", nullable = false, length = 20)
   private String bcategory;
 
-  @Column(name = "b_update", length = 10)
-  private String bupdate;
+  @Column(name = "b_update")
+  @UpdateTimestamp
+  private Timestamp bupdate;
 
-  @Column(name = "b_view")
+  @Column(name = "b_view" ,columnDefinition="default 0")
   private int bview;
 
-  @Column(name = "b_like")
+  @Column(name = "b_like" ,columnDefinition="default 0")
   private int blike;
 
-  @Column(name = "b_report")
+  @Column(name = "b_report" ,columnDefinition="default 0")
   private int breport;
 
-  @Column(name = "b_comment")
+  @Column(name = "b_comment" ,columnDefinition="default 0")
   private int bcomment;
 
   @Column(name = "b_date")

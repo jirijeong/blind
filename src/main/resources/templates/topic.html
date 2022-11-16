@@ -8,6 +8,7 @@
           height: 35px;
           margin: 0 auto;
           text-align: center;
+
       }
 
       ol {
@@ -22,38 +23,256 @@
       }
 
       .post_wrap {
-          height: 180px;
           box-sizing: border-box;
-          border: 1px solid black;
+          height: 180px;
+          padding-left: 20px;
+          float: left;
           width: 50%;
           margin: 0 auto;
-          float: left;
+      }
+
+      .post_wrap:nth-child(2n) {
+          border-top: 1px solid lightgray;
+          border-bottom: 1px solid lightgray;
+          display: inline-block;
+
+      }
+
+      .post_wrap:nth-child(2n-1) {
+          border: 1px solid lightgray;
+          border-left: none;
+          border-bottom: none;
+          display: inline-block;
+
+      }
+      * {
+          margin : 0;
+          padding : 0;
+      }
+
+      .post_area {
+          position: relative;
       }
 
       section {
           width: 1100px;
           margin: 0 auto;
+          overflow: hidden;
       }
 
       header {
           height: 80px;
           width: 100%;
-          border: 1px solid black;
+          background-color: gray;
       }
 
-      .post_info {
-          margin-left: 10px;
 
+      body {
+          position: relative;
+      }
+
+      footer {
+          width: 100%;
+          height: 80px;
+          background-color: gray;
+          bottom: 0;
+          color:white;
+      }
+
+      .post_title {
+          height: 52px;
+          max-height: 52px;
+          margin-top: 1px;
+          font-size: 18px;
+          font-weight: bold;
+          margin-left : 10px;
+          line-height: 3;
+      }
+
+      .post_content {
+          height: 43px;
+          max-height: 43px;
+          margin-top: 4px;
+          font-size: 14px;
+          margin-left : 10px;
+      }
+
+      .post_info,  .post_writer {
+          position: relative;
+          margin-top: 8px;
+          font-size: 12px;
+          margin-left: 10px;
+      }
+      .post_info{
+          opacity: 0.8;
+          color: gray;
+      }
+
+      .post_category {
+          padding-top :10px;
+          font-size: 12px;
+          margin-bottom: 10px;
+          margin-left : 10px;
+          opacity: 0.8;
+          color: black;
+      }
+
+      .hidden {
+          display: none;
+      }
+
+      .post_date {
+          float: right;
+          margin-right: 20px;
       }
 
   </style>
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
           crossorigin="anonymous"></script>
+
+
+  <script th:inline="javascript">
+
+
+      //메세지 출력
+      $(function () {
+          let m = [[${msg}]];
+          if (m != null) {
+              alert(m);
+          }
+
+
+          let pageNum=null ;
+          let category=null ;
+        console.log(pageNum)
+
+          //메인->토픽 이동 시 매핑 처리
+          $(function () {
+              if ([[${category}]] != null) {
+                  category = [[${category}]];
+              } else {
+                  category = "전체"
+              }
+              getTopic(category, pageNum)
+          })
+
+          //페이지 열리면 글 출력
+
+
+          //주제 클릭시, 해당 글 출력
+          $('li').click(function () {
+              pageNum = null;
+              category = $(this).text();
+              console.log(pageNum)
+              console.log(category)
+              $('.post_area').empty();
+              getTopic(category, pageNum)
+          });
+
+
+          //글 출력하기(20개)
+          function getTopic(category, pageNum) {
+              let nowDate = new Date().getTime();
+              $.ajax({
+                  type: 'get',
+                  url: "getTopicList",
+                  dataType: "JSON",
+                  data: {
+                      "category": category,
+                      "pageNum": pageNum
+                  },
+                  success: [function (topicList) {
+
+                      $.each(topicList, function (idx, board) {
+
+                          if (topicList == null) {
+                              alert("더이상 작성된 댓글이 없습니다.")
+                              return;
+                          }
+                          let fromNow;
+
+                          let a = new Date(board.bdate);
+                          let writtenDate = a.getTime();
+
+                          console.log("bdate =  " + board.bdate)
+
+
+                          let timeGap = (nowDate - writtenDate) / 1000 / 60;
+
+                          if (timeGap < 1) {
+                              fromNow = "방금전";
+                          } else if (1 <= timeGap && timeGap < 60) {
+                              fromNow = Math.floor(timeGap) + "분전";
+                          } else if (60 <= timeGap && timeGap < 60 * 24) {
+                              fromNow = Math.floor(timeGap / 60) + "시간전";
+                          } else if (60 * 24 <= timeGap && timeGap < 60 * 24 * 30) {
+                              fromNow = Math.floor(timeGap / 60 / 24) + "일전";
+                          } else if (60 * 24 * 30 <= timeGap && timeGap < 60 * 24 * 30 * 12) {
+                              fromNow = Math.floor(timeGap / 60 / 24 / 30) + "달전";
+                          } else {
+                              fromNow = Math.floor(timeGap / 60 / 24 / 30 / 12) + "년전";
+                          }
+                          console.log(fromNow);
+
+                          let $postWrap = $('<div class="post_wrap">').appendTo('.post_area');
+                          let $infoWrap = ($postWrap).append('<div class="info_wrap">');
+
+                          $('<span class="post_category">').html(board.bcategory).appendTo($postWrap);
+                          $('<div class="post_title readPost">').html('<span >' + board.btitle + '</span>').appendTo($postWrap);
+                          $('<div class="post_content readPost">').html('<span >' + board.bcontent + '</span>').appendTo($postWrap);
+                          $('<span class="hidden">').html(board.bno).appendTo($postWrap);
+
+
+                          $('<span class="post_writer">').html(board.mbid.mcname + " · " + board.mbid.mid + '</br>').appendTo($postWrap);
+                          // $('<span class="post_info">').html("회사명: " + board.mbid.mcname ).appendTo($infoWrap);
+                          // $('<span class="post_info">').html("작성자: " + board.mbid.mid ).appendTo($infoWrap);
+                          $('<span class="post_info">').html("👍 : " + board.blike).appendTo($infoWrap);
+                          $('<span class="post_info">').html("💬 : " + board.bcomment).appendTo($infoWrap);
+                          $('<span class="post_info">').html("조회수 : " + board.bview).appendTo($infoWrap);
+                          // $('<span class="post_info">').html(board.bdate).appendTo($infoWrap);
+                          $('<span class="post_date post_info">').html(fromNow).appendTo($infoWrap);
+
+                      });
+                  }],
+                  error: [function (error) {
+                      console.log(error)
+                  }]
+              });
+          }
+
+          //무한페이징
+          $(window).scroll(function () {
+              console.log("Math.round($(window).scrollTop() = " + Math.round($(window).scrollTop()))
+              console.log(" $(document).height() - $(window).height() = " + $(document).height() + "-" + $(window).height())
+              console.log("차이 = " + parseInt($(document).height() - $(window).height()))
+
+              if (Math.round(parseInt($(window).scrollTop())) == $(document).height() - $(window).height()) {
+                  pageNum++;
+                  console.log("pageNum = " + pageNum)
+                  getTopic(category, pageNum);
+              }
+          })
+
+
+          //상세보기 페이지 이동
+          $(document).on("click", ".readPost", function () {
+              let bno = $(this).siblings('.hidden').text();
+              console.log("bno = " + bno)
+              location.href = "detail?bno=" + bno;
+          })
+
+      })
+      //날짜 계산
+
+
+  </script>
+
+
 </head>
 <body>
 <header>
-
+  <th:block th:include="header.html"></th:block>
 </header>
 <section>
   <div class="topic_wrap">
@@ -69,140 +288,24 @@
     </ol>
   </div>
   <br>
+
+  <span id="categoryPrint"></span>
+
+
   <div class="post_area">
+
+<!--    <div style="display: flex">-->
+<!--      <span>new</span>-->
+<!--      <span>hot</span>-->
+
+<!--    </div>-->
 
   </div>
 
 </section>
+<footer>
+  <!--  <th:block th:include="footer.html"></th:block>-->
+</footer>
 </body>
-<script th:inline="javascript">
-    //메세지 출력
-    $(function () {
-        let m = [[${msg}]];
-        if (m != null) {
-            alert(m);
-        }
-    })
 
-
-    let pageNum = null;
-    let category = null;
-
-
-    //메인->토픽 이동 시 매핑 처리
-    $(function () {
-        if ([[${category}]] != null) {
-            category = [[${category}]];
-        } else {
-            category = "전체"
-        }
-        getTopic(category, pageNum)
-
-    })
-
-
-    //페이지 열리면 글 출력
-
-
-    //주제 클릭시, 해당 글 출력
-    $('li').click(function () {
-        pageNum = null;
-        category = $(this).text();
-        console.log(pageNum)
-        console.log(category)
-        $('.post_area').empty();
-        getTopic(category, pageNum)
-    });
-
-
-    //글 출력하기(20개)
-    function getTopic(category, pageNum) {
-        let nowDate = new Date().getTime();
-        $.ajax({
-            type: 'get',
-            url: "getTopicList",
-            dataType: "JSON",
-            data: {
-                "category": category,
-                "pageNum": pageNum
-            },
-            success: [function (topicList) {
-
-
-                $.each(topicList, function (idx, board) {
-                    let fromNow;
-
-                    let a = new Date(board.bdate);
-                    let writtenDate =a.getTime();
-
-                    console.log("bdate =  " +board.bdate)
-
-
-                    let timeGap = (nowDate - writtenDate) / 1000 / 60;
-
-                    if (timeGap < 1) {
-                        fromNow = "방금전";
-                    } else if (1 <= timeGap && timeGap < 60) {
-                        fromNow = Math.floor(timeGap) + "분전";
-                    } else if (60 <= timeGap && timeGap < 60 * 24) {
-                        fromNow = Math.floor(timeGap / 60) + "시간전";
-                    } else if (60 * 24 <= timeGap && timeGap < 60 * 24 * 30) {
-                        fromNow = Math.floor(timeGap / 60 / 24) + "일전";
-                    } else if (60 * 24 * 30 <= timeGap && timeGap < 60 * 24 * 30 * 12) {
-                        fromNow = Math.floor(timeGap / 60 / 24 / 30) + "달전";
-                    } else {
-                        fromNow = Math.floor(timeGap / 60 / 24 / 30 / 12) + "년전";
-                    }
-                    console.log(fromNow);
-
-                    let $postWrap = $('<div class="post_wrap">').appendTo('.post_area');
-                    let $infoWrap = ($postWrap).append('<div class="info_wrap">');
-
-                    $('<span class="post_cate">').html(board.bcategory).appendTo($postWrap);
-                    $('<div class="post_title readPost">').html('<span >' + board.btitle + '</span>').appendTo($postWrap);
-                    $('<div class="post_content readPost">').html('<span >' + board.bcontent + '</span>').appendTo($postWrap);
-                    $('<span class="hidden">').html(board.bno).appendTo($postWrap);
-
-                    $('<span class="post_info">').html("작성자: " + board.mbid.mid ).appendTo($infoWrap);
-                    $('<span class="post_info">').html("회사명: " + board.mbid.mcname ).appendTo($infoWrap);
-                    $('<span class="post_info">').html("조회수: " + board.bview).appendTo($infoWrap);
-                    $('<span class="post_info">').html("좋아요수: " + board.blike).appendTo($infoWrap);
-                    $('<span class="post_info">').html("댓글 수: " + board.bcomment).appendTo($infoWrap);
-                    // $('<span class="post_info">').html(board.bdate).appendTo($infoWrap);
-                    $('<span class="post_info">').html(fromNow).appendTo($infoWrap);
-
-                });
-            }],
-            error: [function (error) {
-                console.log(error)
-            }]
-        });
-    }
-
-    //무한페이징
-    $(window).scroll(function () {
-        console.log("Math.round($(window).scrollTop() = " + Math.round($(window).scrollTop()))
-        console.log(" $(document).height() - $(window).height() = " + $(document).height() + "-" + $(window).height())
-        console.log("차이 = " + parseInt($(document).height() - $(window).height()))
-
-        if (Math.round($(window).scrollTop()) === $(document).height() - $(window).height()) {
-
-            pageNum++;
-            getTopic(category, pageNum);
-        }
-    })
-
-
-    //상세보기 페이지 이동
-    $(document).on("click", ".readPost", function () {
-        let bno = $(this).siblings('.hidden').text();
-        console.log("bno = " + bno)
-        location.href = "detail?bno=" + bno;
-    })
-
-
-    //날짜 계산
-
-
-</script>
 </html>

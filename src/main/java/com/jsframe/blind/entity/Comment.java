@@ -21,27 +21,20 @@ public class Comment {
   @JoinColumn(name="m_c_id")
   private Member mcid;
 
-
-  @Column(name="m_cname")
-  private String mcname;
-
-
   @ManyToOne
   @JoinColumn(name="b_c_no")
   private Board bcno;
-
 
   @Column(name="c_date")
   @CreationTimestamp
   private Timestamp cdate;
 
-
-  @Column(name="c_like")
+  @Column(name="c_like" ,columnDefinition="default 0")
   private int clike;
 
   @Column(name="c_content", length = 200, nullable = false)
   private String ccontent;
 
-  @Column(name="c_report")
+  @Column(name="c_report",columnDefinition="default 0")
   private int creport;
 }

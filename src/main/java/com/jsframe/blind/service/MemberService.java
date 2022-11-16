@@ -23,7 +23,7 @@ public class MemberService {
 
 
   @Transactional
-  public String regMember(Member member, RedirectAttributes rttr) {
+  public String regMember(Member member, RedirectAttributes rttr, HttpSession session) {
     log.info("regMember()");
     String msg = null;
     String view = null;
@@ -34,8 +34,11 @@ public class MemberService {
 
     try {
       mRepo.save(member);
-      msg = "가입성공";
+      msg = "회원가입이 완료됐습니다.";
+      session.setAttribute("member", member);
+
       view = "redirect:/";
+
     } catch (Exception e) {
       e.printStackTrace();
       msg = "가입실패";
@@ -67,18 +70,18 @@ public class MemberService {
       String userPwd = member.getMpwd();//사용자가 입력한 비밀번호
 
       if(encoder.matches(userPwd, dbPwd)){
-        msg = "로그인 성공";
-        view = "redirect:topic";//로그인 성공 후 페이지(메인)
+        msg = "로그인 됐습니다.";
+        view = "redirect:/";//로그인 성공 후 페이지(메인)
         session.setAttribute("member", dbMember);
       }
       else {
-        msg = "비밀번호 맞지않음";
-        view = "redirect:/";//로그인이 있는 페이지로 이동
+        msg = "비밀번호가 일치하지 않습니다..";
+        view = "redirect:login";//로그인이 있는 페이지로 이동
       }
     }
     else {
-      msg = "가입된 아이디가 아닙니다.";
-      view = "redirect:/";//로그인이 있는 페이지로 이동
+      msg = "등록되지 않은 아이디를 입력하셨습니다. \n아이디 확인 후 다시 시도해주세요.";
+      view = "redirect:login";//로그인이 있는 페이지로 이동
     }
     rttr.addFlashAttribute("msg", msg);
     return view;

@@ -1,114 +1,245 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .hidden {
+        display: none;
+    }
 
+</style>
 <head>
-    <meta charset="UTF-8">
-    <meta name ="viewport" content ="width=device-width, initial-scale=1">
-    <title>게시글 상세페이지</title>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    <script th:inline="javascript">
-        $(function(){
-            let msg = [[${msg}]];
-            if(msg != null){
-                alert(msg);
-            }
-        });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>게시글 상세페이지</title>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+          integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <div class="content">
-    <div class="view_head">
-        <div class="category" th:text="${board.bcategory}"></div>
-        <div class="content_title" th:text="${board.btitle}"></div>
-        <div>
-<!--            <span th:text="${board.mcname.mcname}"></span>-->
-<!--            <span th:text="${board.mbId}"></span> &lt;!&ndash;회사 이름 | 작성자 아이디&ndash;&gt;-->
-        </div>
-        <div class="info">
-            <span th:text="${board.bview}"></span> ·
-            <span th:text="${board.bcomment}"></span> ·
-<!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
-        </div>
-    </div>
+  <div class="view_head">
+    <div class="category" th:text="${board.bcategory}"></div>
+    <div class="content_title" th:text="${board.btitle}"></div>
     <div>
+      <span th:text="${board.mbid.mcname}"></span>
+      <span th:text="${board.mbid.mid}"></span>
+    </div>
+    <div class="info">
+      <span th:text="${board.bview}"></span> ·
+      <span th:text="${board.bcomment}"></span> ·
+      <!--            <span th:text="${}"></span> &lt;!&ndash;시간 넣을 곳&ndash;&gt;-->
+    </div>
+  </div>
+  <div>
     <div class="content" th:text="${board.bcontent}"></div>
     <div>
-        <button id="upbtn">수정</button>
-        <button id="delbtn">삭제</button>
-        <button id="backbtn">뒤로가기</button>
+      <button id="upbtn" class="hidden">수정</button>
+      <button id="delbtn" class="hidden">삭제</button>
+      <button id="backbtn">뒤로가기</button>
     </div>
+  </div>
+
+  <!-- 첨부파일 출력 부분-->
+  <div>
+    <div class="">FILES</div>
+    <!--    <div class="d_content p-85 file_h" style="overflow: auto;">-->
+    <th:block th:if="${#lists.isEmpty(bfList)}">
+      첨부된 파일이 없습니다.
+    </th:block>
+    <th:block th:unless="${#lists.isEmpty(bfList)}">
+      <th:block th:each="bf:${bfList}">
+        <a th:href="@{download(fsysname=${bf.fsysname},foriname=${bf.foriname})}">
+          <span class="file-title" th:text="${bf.foriname}"></span>
+        </a>
+      </th:block>
+    </th:block>
+  </div>
 </div>
 
-<!-- 첨부파일 출력 부분-->
-<div>
-    <div class="">FILES</div>
-<!--    <div class="d_content p-85 file_h" style="overflow: auto;">-->
-        <th:block th:if="${#lists.isEmpty(bfList)}">
-            첨부된 파일이 없습니다.
-        </th:block>
-        <th:block th:unless="${#lists.isEmpty(bfList)}">
-            <th:block th:each="bf:${bfList}">
-                <a th:href="@{download(bfsysname=${bf.bfsysname},bforiname=${bf.bforiname})}">
-                    <span class="file-title" th:text="${bf.bforiname}"></span>
-                </a>
-            </th:block>
-        </th:block>
-    </div>
-</div>
-<!--  댓글 작성 부분  -->
+
+<div class="reply_wrap">
+  <th:block th:if="${session.member}!=null">
     <div class="reply">
-        <form id="replyfrm" class="reply_form">
-<!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
-            <input type="hidden" name="mcid" value="test">
-            <input type="hidden" name="mcname" value="testcomp">
-            <input type="hidden" name="bcno" th:value="${board.bno}">
-            <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
-        </form>
+      <form action="cWriteProc" method="post" id="replyfrm" class="reply_form">
+        <!--      작성자 cname과 아이디 저장되어야 함... 근데 어떻게 작성해야할지 모르겠음...      -->
+
+        <input type="hidden" name="mccname" th:value="${session.member.mcname}">
+        <input type="hidden" name="bcno" th:value="${session.board.bno}">
+        <input type="hidden" name="mcid" th:value="${session.member.mid}">
+        <input id="replyup" type="text" name="ccontent" placeholder="댓글을 입력해주세요">
+      </form>
     </div>
-<!--  작성된 댓글 출력 부분  -->
-    <div class="comment" th:each="comment:${commentList}">
-        <div class="info">
-            <span th:text="${comment.mcname}"></span> ·
-            <span th:text="${comment.mcid.mid}"></span> ·
-<!--            <span th:text="${}"></span>-->
-        </div>
-        <div class="ccontent" th:text="${comment.ccontent}">
-        <span><button type="submit" name="submit" value="update">수정</button></span>
-        <span><button type="submit" name="submit" value="delete">삭제</button></span>
-    </div>
-    </div>
+  </th:block>
+  <th:block th:unless="${session.member}!=null">
+    <input placeholder="댓글을 입력하시려면, 먼저 로그인 해주세요" readonly>
+    <button id="login">로그인</button>
+  </th:block>
+
+  <div class="comment_area">
+
+  </div>
+
+
+  <!--  &lt;!&ndash;  작성된 댓글 출력 부분  &ndash;&gt;-->
+  <!--  <div class="comment" th:each="comment:${commentList}">-->
+  <!--    <div class="info">-->
+  <!--      <span th:text="${comment.mcname}"></span> ·-->
+  <!--      <span th:text="${comment.mcid.mid}"></span> ·-->
+  <!--      &lt;!&ndash;            <span th:text="${}"></span>&ndash;&gt;-->
+  <!--    </div>-->
+  <!--    <div class="ccontent" th:text="${comment.ccontent}">-->
+  <!--      <span><button type="submit" name="submit" value="update">수정</button></span>-->
+  <!--      <span><button type="submit" name="submit" value="delete">삭제</button></span>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>
+<button id="moreComment">댓글 더보기</button>
 
 
 </body>
 <script th:inline="javascript">
-    /////////////////////////////////////////////////////////////
-    $("#replyup").on("keyup", function () {
+    let msg = [[${msg}]];
+    if (msg != null) {
+        alert(msg);
+    }
 
-        const rp = $("#replyfrm").serialize();
 
+    let mid = null;
+
+    if ([[${session.member}]] != null) {
+
+        mid = [[${session.member?.mid}]]
+
+        if ([[${session.member}]] === [[${board.mbid}]]) {
+            $("#upbtn").removeClass("hidden");
+            $("#delbtn").removeClass("hidden");
+        }
+
+        //
+        // $(".post_wrap").on("createElement", ".deleteCommentBtn", function(){
+        //    if( $(this).prev(".post_writer").text()==mid){
+        //        $(".deleteCommentBtn").removeClass("hidden")
+        //    }
+        //
+        // })
+
+
+
+    }
+
+
+    let nowBno = [[${session.board.bno}]]
+
+
+    let cPageNum = null;
+    console.log(cPageNum)
+
+    getComment(cPageNum, mid, nowBno)
+
+    //댓글 5개씩 출력
+    function getComment(cPageNum, mid, nowBno) {
+        let nowDate = new Date().getTime();
         $.ajax({
-            url: "detail",
-            type: "post",
-            data: rp,
-            success: function (result) {
-
+            type: 'get',
+            url: "getCommentList",
+            dataType: "JSON",
+            data: {
+                'cPageNum': cPageNum,
+                'mid': mid,
+                'bno' : nowBno
             },
-            error: function (error) {
-                console.log(error);
-            }
+            success: [function (commentList) {
+
+                $.each(commentList, function (idx, comment) {
+
+                    if (commentList == null) {
+                        return;
+                    }
+                    let fromNow;
+
+                    let a = new Date(comment.cdate);
+                    let writtenDate = a.getTime();
+
+                    console.log("cdate =  " + comment.cdate)
+
+                    let timeGap = (nowDate - writtenDate) / 1000 / 60;
+
+                    if (timeGap < 1) {
+                        fromNow = "방금전";
+                    } else if (1 <= timeGap && timeGap < 60) {
+                        fromNow = Math.floor(timeGap) + "분전";
+                    } else if (60 <= timeGap && timeGap < 60 * 24) {
+                        fromNow = Math.floor(timeGap / 60) + "시간전";
+                    } else if (60 * 24 <= timeGap && timeGap < 60 * 24 * 30) {
+                        fromNow = Math.floor(timeGap / 60 / 24) + "일전";
+                    } else if (60 * 24 * 30 <= timeGap && timeGap < 60 * 24 * 30 * 12) {
+                        fromNow = Math.floor(timeGap / 60 / 24 / 30) + "달전";
+                    } else {
+                        fromNow = Math.floor(timeGap / 60 / 24 / 30 / 12) + "년전";
+                    }
+                    console.log(fromNow);
+
+                    let $postWrap = $('<div class="post_wrap">').appendTo('.comment_area');
+                    let $infoWrap = ($postWrap).append('<div class="info_wrap">');
+
+                    $('<span class="post_company">').html(comment.mcid.mcname + " · ").appendTo($postWrap);
+                    $('<span class="post_writer">').html(comment.mcid.mid + '</br>').appendTo($postWrap);
+                    $('<div class="post_content readPost">').html(comment.ccontent).appendTo($postWrap);
+
+
+                    $('<span class="post_info">').html("👍 : " + comment.clike).appendTo($infoWrap);
+                    $('<span class="post_date post_info">').html(fromNow).appendTo($infoWrap);
+                    $('<button class="deleteCommentBtn hidden">').text("댓글 삭제").appendTo($infoWrap);
+                    $('<span class="hidden">').html(comment.cno).appendTo($infoWrap);
+                });
+            }],
+            error: [function (error) {
+                console.log(error)
+                console.log("pno = " + cPageNum)
+            }]
         });
+    }
+
+
+
+
+
+    $("#moreComment").click(function () {
+        cPageNum++
+        getComment(cPageNum, mid,nowBno)
     })
+
+
+    $("#login").click(function () {
+            location.href = "login"
+        }
+    )
+
+
     //뒤로가기 버튼
     $("#backbtn").click(function () {
-        location.href = "/topic";
+        location.href = "/?category=" + [[${board.bcategory}]];
     });
     //게시글 수정
-    $("#upbtn").click(function (){
-        location.href = "updateFrm?bno=" + [[${board.bno}]];
+    $("#upbtn").click(function () {
+        location.href = "updateFrm?bno=" + nowBno;
     });
     //게시글 삭제
-    $("#delbtn").click(function (){
-        location.href = "delete?bno=" + [[${board.bno}]];
+    $("#delbtn").click(function () {
+        let checkDel = confirm("글 제목 '" + [[${board.btitle}]] + "'을(를) 정말 삭제하시겠습니까?")
+        if (checkDel) {
+            location.href = "delete?bno=" + nowBno;
+        } else {
+            alert("삭제가 취소됐습니다.")
+        }
     });
+
+    $(document).on("click", ".deleteCommentBtn", function () {
+
+        let cno = $(this).next().html();
+        console.log(cno)
+        location.href = "cDeleteProc?cno=" + cno
+    })
+
+
 </script>
 </html>

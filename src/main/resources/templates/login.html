@@ -5,8 +5,9 @@
     <title>Home</title>
 </head>
 <body>
+<th:block th:include="header.html"></th:block>
 <div class="helloId">
-    <h1 id="title">Member Manager</h1>
+    <h1 id="title">로그인</h1>
 </div>
 <br>
 <center>
@@ -19,7 +20,7 @@
                 <form th:action="@{loginProc}" method="post">
                     <div class="control-group">
                         <input type="text" class="login-field"
-                               placeholder="ID를 입력해 주세요". name="mid">
+                               placeholder="ID를 입력해 주세요" name="mid">
                     </div>
                     <div class="control-group">
                         <input type="password" class="login-field"
