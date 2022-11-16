@@ -8,14 +8,26 @@
     padding: 0px;
     margin: 0px;
 }
+.top-right{
+    padding: 0px;
+    margin: 0px;
+    background-color: #ffffff;
+    color: #222222;
+    min-height: 70px;
+    line-height: 70px;
+}
+.top-left {
+    padding: 0px;
+    margin: 0px;
+}
+.top-right{
+    padding: 0px;
+    margin: 0px;
+}
 .logo {
     width: 150px;
     margin-top: 25px;
     margin-left: 15px;
-}
-
-.top_btn{
-    float: right;
 }
 
 #top_post{
@@ -47,5 +59,7 @@
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-    max-width: 800px;
+    max-width: 850px;
+    display: flex;
+    justify-content: space-between;
 }
