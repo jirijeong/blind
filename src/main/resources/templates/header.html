@@ -9,6 +9,7 @@
     <div class="top-right top_btn">
       <button id="top_post">글쓰기</button>
       <button id="top_login">로그인</button>
+      <button th:if="${session.member != null}"><a th:href="@{/logoutProc}">로그아웃</a></button>
     </div>
   </div>
 </div>

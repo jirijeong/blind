@@ -60,4 +60,12 @@ public class MemberController {
     return msg;
   }
 
+  // 로그아웃
+  @GetMapping("logoutProc")
+  public String logoutProc(HttpSession session){
+    log.info("logoutProc()");
+    session.invalidate();
+    //세션 제거 후 첫 페이지로..
+    return "redirect:/";
+  }
 }
