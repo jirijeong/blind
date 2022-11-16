@@ -100,9 +100,9 @@ public class CommentService {
     log.info("getCommentList()");
 
     int listCnt = 5;
-    if (cPageNum == null) {
-      cPageNum = 1;
-    }
+//    if (cPageNum == null) {
+//      cPageNum = 1;
+//    }
     Pageable commentPageable = PageRequest.of(cPageNum - 1, listCnt, Sort.Direction.DESC, "cdate");
 
     Board board = bRepo.findById(bno).get();
@@ -124,7 +124,7 @@ public class CommentService {
 
       if (mid != null) {
         if (mid.equals(userId)) {
-          break;
+          continue;
         }
       }
       String maskedId = userId.substring(0, 1);

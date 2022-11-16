@@ -31,15 +31,28 @@ public class BoardController {
 
 
   @GetMapping("/")
-  public ModelAndView topic(String category) {
+  public ModelAndView topic(String category, HttpSession session) {
     log.info("topic()");
     mv = new ModelAndView();
-    if(category!=null) {
+    try {
+   //   log.info("session before try = "+ session.getAttribute("board").toString());
+      session.getAttribute("board");
+      session.removeAttribute("board");
+    //  log.info("session after try = "+ session.getAttribute("board").toString());
+    }catch (Exception e){
+      //e.printStackTrace();
+    }finally {
 
-      mv.addObject("category", category);
+
+      if (category != null) {
+
+        mv.addObject("category", category);
+      }
+      mv.setViewName("topic");
+
     }
-    mv.setViewName("topic");
     return mv;
+
   }
 
 

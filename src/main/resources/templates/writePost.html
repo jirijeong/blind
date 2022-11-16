@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Board - write</title>
+    <link rel="stylesheet" href="css/writePost.css">
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"
           integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
   <script th:inline="javascript">
@@ -31,44 +32,42 @@
       });
   </script>
 </head>
+<th:block th:include="header.html"></th:block>
 <body>
-
-
-
 <div class="content">
   <form th:action="@{writeProc}" method="post" class="write-form" enctype="multipart/form-data">
     <!--    파일 업로드할 때 필요한 속성. -->
-    <h2 class="login-header">글 작성</h2>
-   <p>카테고리 <select name="bcategory">
+    <h2 class="login-header">글쓰기</h2>
+      <hr style="color: #d4d4d4; opacity: 0.7">
+   <select class="bca" name="bcategory">
       <option>블라블라</option>
       <option>회사생활</option>
       <option>주식/투자</option>
-      <option>썸 연애</option>
+      <option>썸/연애</option>
       <option>결혼</option>
       <option>라이프</option>
-    </select></p>
-    <p>제목 : <input type="text" class="" name="btitle" autofocus placeholder="제목" required></p>
-    <p>작성자 : <input type="text" class="" name="mbid" th:value="${session.member.mid}" readonly></p>
+    </select>
+      <hr style="color: #d4d4d4; opacity: 0.7">
+    <input type="text" class="bt" name="btitle" autofocus placeholder="제목을 입력해주세요" required>
+      <hr style="color: #d4d4d4; opacity: 0.7">
+     <input type="text" class="" name="mbid" th:value="${session.member.mid}" readonly>
 
-    <p>내용 : <textarea rows="15" name="bcontent" placeholder="글 내용을 작성하세요.(1000자 이내)" ></textarea></p>
-
-
+    <textarea rows="15" class="bcon" name="bcontent" placeholder="글 내용을 입력해주세요(1000자 이내)" ></textarea>
+      <hr style="color: #d4d4d4; opacity: 0.7">
 
     <div class="filebox">
-      <label for="file">업로드</label>            <!--      for속성엔 lable로 묶을 요소의 아이디를 넣는다.-->
-      <input type="file" name="files" id="file" multiple><!-- mulitple을 붙이면, 한번에 여러개의 피일을 넣을 수 있다)-->
-      <input type="text" class="" value="파일 선택" readonly>
+      <label for="file">업로드 파일</label>            <!--      for속성엔 lable로 묶을 요소의 아이디를 넣는다.-->
+      <input type="file" name="files" id="file" value="첨부파일" multiple><!-- mulitple을 붙이면, 한번에 여러개의 피일을 넣을 수 있다)-->
+<!--      <input type="text" class="" value="파일 선택" readonly>-->
     </div>
-
-
     <div class="btn-area">
-      <input type="submit" class="" value="W">
-      <input type="reset" class="" value="R">
-      <input type="button" class="" value="B" id="backbtn">
+        <input type="button" id="bbtn" value="뒤로가기">
+        <input type="submit" id="wbtn" value="작성하기">
+<!--      <input type="reset" class="" value="R">-->
+
     </div>
   </form>
 </div>
-
 
 </body>
 <!--    session에 저장한 데이터를 꺼낼 땐, 'session.이름' 으로 사용한다.-->
@@ -76,5 +75,7 @@
     $("#backbtn").click(function () {
         location.href = "/?category=" + [[${session.category}]];
     });
+    console.log("id" + [[${session.member.mid}]])
+
 </script>
 </html>

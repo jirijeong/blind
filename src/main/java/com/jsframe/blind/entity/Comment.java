@@ -29,12 +29,12 @@ public class Comment {
   @CreationTimestamp
   private Timestamp cdate;
 
-  @Column(name="c_like" ,columnDefinition="default 0")
+  @Column(name="c_like")
   private int clike;
 
   @Column(name="c_content", length = 200, nullable = false)
   private String ccontent;
 
-  @Column(name="c_report",columnDefinition="default 0")
+  @Column(name="c_report")
   private int creport;
 }

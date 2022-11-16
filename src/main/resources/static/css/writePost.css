@@ -1,0 +1,76 @@
+.login-header{
+    font: bold 17px "Roboto Light";
+    color: #222222;
+    text-align: center;
+}
+
+.wrapdiv {
+    margin: auto;
+    width: 700px;
+}
+.content{
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.bca{
+    width: 150px;
+    height: 25px;
+    border: 1px solid #d4d4d4;
+    font: 13px "Roboto Light";
+    text-align: center;
+}
+
+.bt{
+    height: 30px;
+    border: none;
+    outline: none;
+    color: #222222;
+}
+.bcon{
+    width: 100%;
+    border: none;
+    outline: none;
+    font: 13px "Roboto Light";
+    color: #222222;
+}
+.filebox{
+    font: 13px "Roboto Light";
+    border: none;
+    outline: none;
+}
+#file{
+    border: none;
+    outline: none;
+    font: 13px "Roboto Light";
+    color: #222222;
+    background-color: white;
+}
+#bbtn{
+    border:1px solid #d4d4d4;
+    font: 13px "Roboto Light";
+    color: #222222;
+    text-align: center;
+    float: right;
+    background-color: #ffffff;
+    width: 70px;
+    height: 35px;
+    cursor: pointer;
+}
+#wbtn{
+    border:1px solid #da3238;
+    font: 13px "Roboto Light";
+    color: #ffffff;
+    text-align: center;
+    float: right;
+    background-color: #da3238;
+    width: 70px;
+    height: 35px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.content{
+    margin: auto;
+    width: 700px;
+}

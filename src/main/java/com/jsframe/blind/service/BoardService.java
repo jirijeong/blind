@@ -59,15 +59,12 @@ public class BoardService {
     mv.addObject("board", board);
 
 
-
     //첨부파일(목록) 가져와서 담기(selet * from boardfiletbl where bfbid = ?)
 
 
     //bfbid로 검색해야하는데 자동완성되지 않으므로, 직접 메서드 생성
     List<BoardFiles> bfList = bfRepo.findByBfno(board);
     mv.addObject("bfList", bfList);
-
-
 
 
     return mv;
@@ -89,7 +86,7 @@ public class BoardService {
     Pageable topicPageable = PageRequest.of(pageNum - 1, listCnt, Sort.Direction.DESC, "bdate");
 
     Pageable bestPageable = PageRequest.of(pageNum - 1, listCnt);
-    List<Board> topicList ;
+    List<Board> topicList;
 
 
     //오늘 날짜 구하기
@@ -112,7 +109,7 @@ public class BoardService {
         todayBest = bRepo.findNowBest(category, now, sixHoursAgo);
         weekBest = bRepo.findWeekBest(category, now, weekAgo);
 
-        if(pageNum==1) {
+        if (pageNum == 1) {
           if (todayBest != null && weekBest == null) {
             topicList.add(0, todayBest);
           } else if (todayBest == null && weekBest != null) {
@@ -123,7 +120,6 @@ public class BoardService {
           }
         }
     }
-
 
 
     session.setAttribute("category", category);
@@ -143,8 +139,8 @@ public class BoardService {
         maskedId += "*";
       }
       user.setMid(maskedId);
-
     }
+
     return topicList;
   }
 
@@ -287,8 +283,6 @@ public class BoardService {
   }
 
 
-
-
   ////////////////////////////
 
   //파일 다운로드 처리) //org.springframework.core.io.Resource
@@ -319,18 +313,6 @@ public class BoardService {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   //게시글 및 관련 파일 삭제
   @Transactional
   public String boardDelete(long bno,
@@ -352,7 +334,7 @@ public class BoardService {
     try {
       //파일 삭제
       for (BoardFiles bf : bfList) {
-        String delPath = realPath+bf.getFsysname();
+        String delPath = realPath + bf.getFsysname();
         File file = new File(delPath);
 
         if (file.exists()) {
@@ -364,22 +346,17 @@ public class BoardService {
       bfRepo.deleteByBfno(board);
       //게시글 삭제
       bRepo.deleteById(bno);
-      msg="삭제 성공";
-      view="redirect:/";
+      msg = "삭제 성공";
+      view = "redirect:/";
     } catch (Exception e) {
       e.printStackTrace();
-      msg="삭제 실패";
-      view ="redirect:detail?bno="+bno;
+      msg = "삭제 실패";
+      view = "redirect:detail?bno=" + bno;
     }
     rttr.addFlashAttribute("msg", msg);
 
     return view;
   }
-
-
-
-
-
 
 
 } // class end

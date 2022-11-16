@@ -33,16 +33,16 @@ public class Board {
   @UpdateTimestamp
   private Timestamp bupdate;
 
-  @Column(name = "b_view" ,columnDefinition="default 0")
+  @Column(name = "b_view")
   private int bview;
 
-  @Column(name = "b_like" ,columnDefinition="default 0")
+  @Column(name = "b_like")
   private int blike;
 
-  @Column(name = "b_report" ,columnDefinition="default 0")
+  @Column(name = "b_report")
   private int breport;
 
-  @Column(name = "b_comment" ,columnDefinition="default 0")
+  @Column(name = "b_comment")
   private int bcomment;
 
   @Column(name = "b_date")
